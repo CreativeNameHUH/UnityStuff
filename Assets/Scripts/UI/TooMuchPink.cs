@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,18 +7,21 @@ namespace UI
     public class TooMuchPink : MonoBehaviour
     {
         public Toggle toggle;
-        public Button[] thingsToMakePink;
+        public Button[] buttons;
+        public TMP_Dropdown[] dropdowns;
+        public Slider[] sliders;
+        
 
         private void ChangeColor(float r, float g, float b, float a)
         {
             Color color = new Color(r, g, b, a);
             int index = 0;
 
-            while (index < thingsToMakePink.Length)
+            while (index < buttons.Length)
             {
-                ColorBlock colorBlock = thingsToMakePink[index].colors;
+                ColorBlock colorBlock = buttons[index].colors;
                 colorBlock.normalColor = color;
-                thingsToMakePink[index].colors = colorBlock;
+                buttons[index].colors = colorBlock;
 
                 index++;
             }
@@ -26,15 +30,26 @@ namespace UI
         private void ChangeColor(float r, float g, float b)
         {
             Color color = new Color(r, g, b, 1f);
-            int index = 0;
 
-            while (index < thingsToMakePink.Length)
+            foreach (Button button in buttons)
             {
-                ColorBlock colorBlock = thingsToMakePink[index].colors;
+                ColorBlock colorBlock = button.colors;
                 colorBlock.normalColor = color;
-                thingsToMakePink[index].colors = colorBlock;
+                button.colors = colorBlock;
+            }
 
-                index++;
+            foreach (TMP_Dropdown dropdown in dropdowns)
+            {
+                ColorBlock colorBlock = dropdown.colors;
+                colorBlock.normalColor = color;
+                dropdown.colors = colorBlock;
+            }
+            
+            foreach (Slider slider in sliders)
+            {
+                ColorBlock colorBlock = slider.colors;
+                colorBlock.normalColor = color;
+                slider.colors = colorBlock;
             }
         }
         public void MakeItPink()

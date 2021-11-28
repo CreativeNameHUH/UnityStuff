@@ -27,8 +27,7 @@ namespace UI
         }
 
         private ResolutionManager _resolutionManager;
-        private NewSceneButton _newScene;
-    
+
         private int _gameFPS;
         private int _menuFPS;
 

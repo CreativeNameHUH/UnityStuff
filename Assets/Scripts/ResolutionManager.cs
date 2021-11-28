@@ -25,6 +25,8 @@ public class ResolutionManager : MonoBehaviour
     public GameObject confirmSettings;
     [Tooltip("Buttons to disable when ConfirmSettings screen is shown")]
     public Button[] buttons;
+    [Tooltip("Sliders to disable")]
+    public Slider[] sliders;
 
     public bool SettingsChanged
     {
@@ -103,6 +105,7 @@ public class ResolutionManager : MonoBehaviour
     public void SetFullscreen()
     {
         _fullscreen = fullscreenToggle.isOn ? 1 : 0;
+        _settingsChanged = true;
         Debug.Log("Fullscreen: " + fullscreenToggle.isOn.ToString());
     }
 
@@ -210,6 +213,11 @@ public class ResolutionManager : MonoBehaviour
             button.enabled = false;
         }
 
+        foreach (Slider slider in sliders)
+        {
+            slider.enabled = false;
+        }
+
         aaDropdown.enabled = false;
         resolutionDropdown.enabled = false;
         shadowsDropdown.enabled = false;
@@ -227,6 +235,11 @@ public class ResolutionManager : MonoBehaviour
         foreach (Button button in buttons)
         {
             button.enabled = true;
+        }
+        
+        foreach (Slider slider in sliders)
+        {
+            slider.enabled = true;
         }
         
         aaDropdown.enabled = true;

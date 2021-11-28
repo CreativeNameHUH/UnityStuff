@@ -7959,13 +7959,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toggle: {fileID: 727846151}
-  thingsToMakePink:
+  buttons:
   - {fileID: 1160995778}
+  - {fileID: 863594397}
+  - {fileID: 1498607583}
   - {fileID: 1241361009}
+  - {fileID: 1685187640}
+  - {fileID: 1647220983}
   - {fileID: 1577627957}
   - {fileID: 1037593132}
-  - {fileID: 1647220983}
-  - {fileID: 1685187640}
+  dropdowns:
+  - {fileID: 115365129}
+  - {fileID: 512540843}
+  - {fileID: 1067979728}
+  sliders:
+  - {fileID: 993608364}
+  - {fileID: 1175316101}
+  - {fileID: 1378063236}
 --- !u!114 &1617974543
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7989,6 +7999,11 @@ MonoBehaviour:
   - {fileID: 1647220983}
   - {fileID: 1685187640}
   - {fileID: 1160995778}
+  - {fileID: 863594397}
+  - {fileID: 1498607583}
+  sliders:
+  - {fileID: 993608364}
+  - {fileID: 1175316101}
 --- !u!1 &1647220982
 GameObject:
   m_ObjectHideFlags: 0
