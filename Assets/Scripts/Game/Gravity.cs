@@ -6,17 +6,20 @@ namespace Game
 {
     public class Gravity : MonoBehaviour
     {
-        public Vector3 gravity = new Vector3(0, -45, 0);
+        [Tooltip("Gravity settings, they are replaced on start")]
+        public Vector3 gravity = new Vector3(0, -50, 0);
 
         public TextMeshProUGUI infoButtonText;
 
-        public Button increaseButton;
-        public Button decreaseButton;
+        public Button          increaseButton;
+        public Button          decreaseButton;
+        
+        private Initialize _gameSettings;
         
         private float _gravityMultiplier = 1f;
-        private float _defaultGravity;
+        private float _defaultGravity    = -50f;
 
-        private const string Text = "Gravity: ";
+        private const string Text        = "Gravity: ";
 
         public void IncreaseGravity()
         {
@@ -24,9 +27,7 @@ namespace Game
                 return;
             
             _gravityMultiplier *= 2f;
-            gravity.y *= _gravityMultiplier;
-            infoButtonText.text = Text + _gravityMultiplier + "x";
-            Physics.gravity = gravity;
+            SetGravity();
         }
 
         public void DecreaseGravity()
@@ -35,9 +36,7 @@ namespace Game
                 return;
             
             _gravityMultiplier /= 2;
-            gravity.y *= _gravityMultiplier;
-            infoButtonText.text = Text + _gravityMultiplier + "x";
-            Physics.gravity = gravity;
+            SetGravity();
         }
 
         public void ResetGravity()
@@ -47,9 +46,18 @@ namespace Game
             infoButtonText.text = Text + "1x";
             Physics.gravity = gravity;
         }
+
+        private void SetGravity()
+        {
+            gravity.y *= _gravityMultiplier;
+            infoButtonText.text = Text + _gravityMultiplier + "x";
+            Physics.gravity = gravity;
+        }
         private void Start()
         {
-            _defaultGravity = gravity.y;
+            _gameSettings = GetComponentInParent<Initialize>();
+            _defaultGravity = _gameSettings.GetSettings.Gravity;
+            gravity.y = _defaultGravity;
             Physics.gravity = gravity;
         }
 

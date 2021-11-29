@@ -1,14 +1,49 @@
+using System.IO;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Game
 {
+    public class Settings
+    {
+        public float Gravity = -50f;
+        public float MaxSize = 200f;
+        public float MinSize = 100f;
+        
+        public int NumberOfBlocks = 50;
+    }
     public class Initialize : MonoBehaviour
     {
-        void Start()
+        public Settings GetSettings => _settings;
+        
+        public string filePath = Directory.GetCurrentDirectory() + @"\game_settings.json";
+
+        private Settings _settings;
+        
+        private void Deserialize()
+        {
+            if (File.Exists(filePath))
+            {
+                string json = File.ReadAllText(filePath);
+                _settings = JsonConvert.DeserializeObject<Settings>(json);
+
+                Debug.Log("Settings deserialized from: " + filePath);
+            }
+            else
+            {
+                _settings = new Settings();
+
+                Debug.Log("Couldn't deserialize from: " + filePath);
+            }
+        }
+
+        private void Awake()
         {
             int targetFPS = PlayerPrefs.GetInt("IngameFPS", 60);
+            Deserialize();
         
             Application.targetFrameRate = targetFPS;
         }
+        
     }
 }

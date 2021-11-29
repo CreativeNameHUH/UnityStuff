@@ -6,7 +6,7 @@ namespace UI
     public class LoadGameSettings : MonoBehaviour
     {
         public GameObject gameSettings;
-        public Button[] buttons;
+        public Button[]   buttons;
 
         private GameObject _gameSettingsClone;
         

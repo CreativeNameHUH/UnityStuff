@@ -1,6 +1,5 @@
 using System;
 using TMPro;
-using UI.Buttons;
 using UnityEngine;
 using Slider = UnityEngine.UI.Slider;
 
@@ -102,7 +101,7 @@ namespace UI
                                + _menuFPS + " FPS";
         }
 
-        private void Start()
+        private void Awake()
         {
             GameObject settingsManager = GameObject.Find("SettingsButtonManager");
 

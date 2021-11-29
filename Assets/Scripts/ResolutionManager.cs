@@ -19,6 +19,8 @@ public class ResolutionManager : MonoBehaviour
     public Toggle fullscreenToggle;
     [Tooltip("Toggle that will turn on or off HDR")]
     public Toggle hdrToggle;
+    [Tooltip("V-sync toggle")] 
+    public Toggle vSyncToggle;
     [Tooltip("Level of details slider")]
     public Slider shadowsSlider;
     [Tooltip("Load prompt for saving current settings")]
@@ -45,6 +47,7 @@ public class ResolutionManager : MonoBehaviour
     {
         Resolution resolution = _resolutions[resolutionDropdown.value];
         Screen.SetResolution(resolution.width, resolution.height, GetFullscreen());
+        
         _settingsChanged = true;
         Debug.Log("Resolution set to: " + resolution.width + "x" + resolution.height);
     }
@@ -102,9 +105,19 @@ public class ResolutionManager : MonoBehaviour
         Debug.Log("HDR set to: " + _hdrSettings.active);
     }
 
+    public void SetVsync()
+    {
+        QualitySettings.vSyncCount = vSyncToggle.isOn ? 1 : 0;
+        
+        _settingsChanged = true;
+        Debug.Log("V-sync: " + vSyncToggle.isOn.ToString());
+    }
+    
+
     public void SetFullscreen()
     {
         _fullscreen = fullscreenToggle.isOn ? 1 : 0;
+        
         _settingsChanged = true;
         Debug.Log("Fullscreen: " + fullscreenToggle.isOn.ToString());
     }
@@ -122,6 +135,7 @@ public class ResolutionManager : MonoBehaviour
         SetShadows();
         SetShadowsResolution();
         SetHDR();
+        SetVsync();
         _fpsTarget.Restore();
     }
 
@@ -141,6 +155,7 @@ public class ResolutionManager : MonoBehaviour
         PlayerPrefs.SetInt("AASettings", aaDropdown.value);
         PlayerPrefs.SetInt("ShadowsSettings", shadowsDropdown.value);
         PlayerPrefs.SetInt("ShadowsResolution", Convert.ToInt32(shadowsSlider.value));
+        PlayerPrefs.SetInt("V-sync", QualitySettings.vSyncCount);
         PlayerPrefs.SetInt("IngameFPS", _fpsTarget.GameFPS);
         PlayerPrefs.SetInt("MenuFPS", _fpsTarget.MenuFPS);
         
@@ -180,20 +195,8 @@ public class ResolutionManager : MonoBehaviour
         shadowsSlider.value = PlayerPrefs.GetInt("ShadowsResolution", 0);
         Debug.Log("Shadows resolution restored");
 
-        if (_hdrSettings.available)
-        {
-            hdrToggle.enabled = true;
-            
-            hdrToggle.isOn =
-                Convert.ToBoolean(PlayerPrefs.GetString("HDRSettings", "false"));
-                Debug.Log("HDR settings restored");
-        }
-        else
-        {
-            hdrToggle.enabled = false;
-            hdrToggle.interactable = false;
-            Debug.Log("HDR settings not available");
-        }
+        vSyncToggle.isOn = PlayerPrefs.GetInt("V-sync", 1) == 1;
+        Debug.Log("V-sync settings restored");
 
         _fpsTarget.GameFPS = PlayerPrefs.GetInt("IngameFPS", 60);
         Debug.Log("In-game FPS restored.");
@@ -201,6 +204,21 @@ public class ResolutionManager : MonoBehaviour
 
         _fpsTarget.MenuFPS = PlayerPrefs.GetInt("MenuFPS", 30);
         Debug.Log("Menu FPS restored.");
+        
+        if (_hdrSettings.available)
+        {
+            hdrToggle.enabled = true;
+            
+            hdrToggle.isOn =
+                Convert.ToBoolean(PlayerPrefs.GetString("HDRSettings", "false"));
+            Debug.Log("HDR settings restored");
+        }
+        else
+        {
+            hdrToggle.enabled = false;
+            hdrToggle.interactable = false;
+            Debug.Log("HDR settings not available");
+        }
 
         ApplySettings();
         _settingsChanged = false;
@@ -223,7 +241,7 @@ public class ResolutionManager : MonoBehaviour
         shadowsDropdown.enabled = false;
         shadowsSlider.enabled = false;
         fullscreenToggle.enabled = false;
-        
+        vSyncToggle.enabled = false;
         if (_hdrSettings.available)
         {
             hdrToggle.enabled = false;
@@ -247,6 +265,7 @@ public class ResolutionManager : MonoBehaviour
         shadowsDropdown.enabled = true;
         shadowsSlider.enabled = true;
         fullscreenToggle.enabled = true;
+        vSyncToggle.enabled = true;
         if (_hdrSettings.available)
         {
             hdrToggle.enabled = true;
@@ -298,6 +317,7 @@ public class ResolutionManager : MonoBehaviour
         shadowsSlider.value = 0;
         resolutionDropdown.value = FindScreenResolution(resolutionOptions);
         fullscreenToggle.isOn = false;
+        vSyncToggle.isOn = true;
         _fpsTarget.gameFPSSlider.value = 60;
         _fpsTarget.GameFPS = 60;
         _fpsTarget.menuFPSSlider.value = 30;
@@ -326,8 +346,8 @@ public class ResolutionManager : MonoBehaviour
 
         return index;
     }
-
-    private void Start()
+    
+    private void Awake()
     {
         _tempObject = confirmSettings;
         _resolutions = Screen.resolutions;

@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour
 {
-    public float CameraSpeed = 3f;
-    public float CameraUpLimit = 45;
+    public float CameraSpeed     = 3f;
+    public float CameraUpLimit   = 45;
     public float CameraDownLimit = -45;
 
     public Camera PCamera;

@@ -18,24 +18,37 @@ namespace Game
         private GameObject[] _blocks;
         private GameObject _baseBlockCopy;
 
+        public Initialize _gameSettings;
+
         private int _blockIndex;
+        private float _maxSize;
+        private float _minSize;
 
         public void Get()
         {
-            switch (blocksDropdown.value)
+            if (_blockIndex < numberOfBlocks)
             {
-                case 0:
-                    GenerateCube();
-                    break;
-                case 1:
-                    GenerateRectangle();
-                    break;
-                case 2:
-                    GenerateCylinder();
-                    break;
-                case 3:
-                    GenerateSphere();
-                    break;
+                switch (blocksDropdown.value)
+                {
+                    case 0:
+                        GenerateCube();
+                        break;
+                    case 1:
+                        GenerateRectangle();
+                        break;
+                    case 2:
+                        GenerateCylinder();
+                        break;
+                    case 3:
+                        GenerateSphere();
+                        break;
+                }
+            }
+            else
+            {                
+                generateButton.enabled = false;
+                generateButton.interactable = false;
+                
             }
         }
 
@@ -45,6 +58,10 @@ namespace Game
             {
                 Destroy(block);
             }
+
+            _blockIndex = 0;
+            generateButton.enabled = true;
+            generateButton.interactable = true;
         }
         
         private void GenerateCube()
@@ -106,27 +123,19 @@ namespace Game
         
         private void GenerateBlock(int xSize, int ySize, int zSize)
         {
-            if (_blockIndex < numberOfBlocks)
-            {
-                baseBlock = Instantiate(baseBlock, GameObject.Find("Blocks").transform, true);
-                baseBlock.transform.localScale = new Vector3(xSize, ySize, zSize);
-                baseBlock.transform.localPosition = RandomPosition();
+            baseBlock = Instantiate(baseBlock, GameObject.Find("Blocks").transform, true);
+            baseBlock.transform.localScale = new Vector3(xSize, ySize, zSize);
+            baseBlock.transform.localPosition = RandomPosition();
                 
-                Renderer blockRenderer = baseBlock.GetComponent<Renderer>();
-                blockRenderer.material.SetColor("_Color", GenerateColor());
+            Renderer blockRenderer = baseBlock.GetComponent<Renderer>();
+            blockRenderer.material.SetColor("_Color", GenerateColor());
 
-                Rigidbody rb = baseBlock.GetComponent<Rigidbody>();
-                rb.mass = RandomMass();
+            Rigidbody rb = baseBlock.GetComponent<Rigidbody>();
+            rb.mass = RandomMass();
                 
-                _blocks[_blockIndex] = baseBlock;
-                _blockIndex++;
-                baseBlock = _baseBlockCopy;
-            }
-            else
-            {
-                generateButton.enabled = false;
-                generateButton.interactable = false;
-            }
+            _blocks[_blockIndex] = baseBlock;
+            _blockIndex++;
+            baseBlock = _baseBlockCopy;
         }
 
         private void GenerateBlock(int size)
@@ -148,7 +157,7 @@ namespace Game
 
         private int RandomSize()
         {
-            return Convert.ToInt32(Random.Range(100f, 200f));
+            return Convert.ToInt32(Random.Range(_minSize, _maxSize));
         }
 
         private Vector3 RandomPosition()
@@ -173,6 +182,10 @@ namespace Game
         {
             Random.InitState(69);
             RandomNewSeed();
+            _gameSettings = GetComponentInParent<Initialize>();
+            _maxSize = _gameSettings.GetSettings.MaxSize;
+            _minSize = _gameSettings.GetSettings.MinSize;
+            numberOfBlocks = _gameSettings.GetSettings.NumberOfBlocks;
             _baseBlockCopy = baseBlock;
             _blocks = new GameObject[numberOfBlocks];
         }
