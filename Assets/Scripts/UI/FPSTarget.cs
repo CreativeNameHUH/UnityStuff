@@ -1,6 +1,5 @@
 using System;
 using TMPro;
-using UI.Buttons;
 using UnityEngine;
 using Slider = UnityEngine.UI.Slider;
 
@@ -27,8 +26,7 @@ namespace UI
         }
 
         private ResolutionManager _resolutionManager;
-        private NewSceneButton _newScene;
-    
+
         private int _gameFPS;
         private int _menuFPS;
 
@@ -103,7 +101,7 @@ namespace UI
                                + _menuFPS + " FPS";
         }
 
-        private void Start()
+        private void Awake()
         {
             GameObject settingsManager = GameObject.Find("SettingsButtonManager");
 
