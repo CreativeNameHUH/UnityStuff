@@ -16,24 +16,24 @@ namespace Game
     {
         public Settings GetSettings => _settings;
         
-        public string filePath = Directory.GetCurrentDirectory() + @"\game_settings.json";
+        private readonly string _filePath = Directory.GetCurrentDirectory() + @"\game_settings.json";
 
         private Settings _settings;
         
         private void Deserialize()
         {
-            if (File.Exists(filePath))
+            if (File.Exists(_filePath))
             {
-                string json = File.ReadAllText(filePath);
+                string json = File.ReadAllText(_filePath);
                 _settings = JsonConvert.DeserializeObject<Settings>(json);
 
-                Debug.Log("Settings deserialized from: " + filePath);
+                Debug.Log("Settings deserialized from: " + _filePath);
             }
             else
             {
                 _settings = new Settings();
 
-                Debug.Log("Couldn't deserialize from: " + filePath);
+                Debug.Log("Couldn't deserialize from: " + _filePath);
             }
         }
 

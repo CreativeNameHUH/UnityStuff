@@ -23,7 +23,7 @@ namespace UI
         public TMP_InputField maxBlocksInputField;
 
         [Tooltip("Location of the settings.")]
-        public string filePath = Directory.GetCurrentDirectory() + @"\game_settings.json";
+        private readonly string _filePath = Directory.GetCurrentDirectory() + @"\game_settings.json";
             
         private Settings _settings;
         private LoadGameSettings _loadSettings;
@@ -50,7 +50,7 @@ namespace UI
             SerializeSettings();
             _loadSettings.DestroyGameSettings();
             
-            Debug.Log("Settings saved in: " + filePath);
+            Debug.Log("Settings saved in: " + _filePath);
         }
 
         private void Restore()
@@ -64,9 +64,9 @@ namespace UI
         private void SerializeSettings()
         {
             string json = JsonConvert.SerializeObject(_settings);
-            File.WriteAllText(filePath, json);
+            File.WriteAllText(_filePath, json);
             
-            Debug.Log("Settings serialized to: " + filePath);
+            Debug.Log("Settings serialized to: " + _filePath);
         }
 
         private void GetObjectData()
@@ -91,16 +91,16 @@ namespace UI
         {
             _settings = JsonConvert.DeserializeObject<Settings>(json);
             
-            Debug.Log("Settings deserialized from: " + filePath);
+            Debug.Log("Settings deserialized from: " + _filePath);
         }
         
         private void Start()
         {
             GetObjectData();
             
-            if (File.Exists(filePath))
+            if (File.Exists(_filePath))
             {
-                string json = File.ReadAllText(filePath);
+                string json = File.ReadAllText(_filePath);
                 DeserializeSettings(json);
                 Restore();
             }
